@@ -2116,11 +2116,15 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
 		}
 		
 		//Level-2, We now want to make sure we don't accept any blocks that would cause us to falsely trigger the above defense
-        if(pindexBest->pprev->pprev->pprev->pprev && nBestHeight > octoberFork) {
-            if(QDateTime::fromTime_t(pindexBest->pprev->pprev->pprev->pprev->GetBlockTime()).secsTo(QDateTime::fromTime_t(pblock->GetBlockTime())) < (60*10)) {
-				return error("\n ProcessBlock() : Possible Multipeer 51 percent detected, initiating anti-legit-peerban defense! halting until valid block! This is normal.. \n");
-			}
-		}
+        if(pindexBest)
+            if(pindexBest->pprev)
+                if(pindexBest->pprev->pprev)
+                    if(pindexBest->pprev->pprev->pprev)
+                        if(pindexBest->pprev->pprev->pprev->pprev && nBestHeight > octoberFork) {
+                            if(QDateTime::fromTime_t(pindexBest->pprev->pprev->pprev->pprev->GetBlockTime()).secsTo(QDateTime::fromTime_t(pblock->GetBlockTime())) < (60*10)) {
+                                return error("\n ProcessBlock() : Possible Multipeer 51 percent detected, initiating anti-legit-peerban defense! halting until valid block! This is normal.. \n");
+                            }
+                        }
 		
 		
 		//stop accepting blocks.. including our own, for ten minutes
