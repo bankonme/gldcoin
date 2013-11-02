@@ -1992,9 +1992,7 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
         return error("ProcessBlock() : CheckBlock FAILED");
 		
     CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(mapBlockIndex);
-	
-	
-		
+
 		//Structure Reference
 		/*
 		//Structure used to hold blockDate/Peer Ip 
@@ -2087,8 +2085,10 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
 								//in order to not get banned ourselves! (there is a small probability we will also mine/receive a block whilst
 								//the 51% attack is going on that is not from the 51%er)
 								//Delay block-transmittance by 14 minutes flag (51% defence)
-								defenseDelayActive = true;
-								time(&defenseStartTime);
+								
+								//Not needed since level-2!
+								//defenseDelayActive = true;
+								//time(&defenseStartTime);
 								
 								//If the block being accepted isn't local
 								if(lastFiveBlocks.at(0).peerIp.compare("local") != 0) {
@@ -2114,7 +2114,6 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
 			//We want to clear the vector to allow for the next five blocks to be checked
 			lastFiveBlocks.clear();
 		}
-		
 		//Level-2, We now want to make sure we don't accept any blocks that would cause us to falsely trigger the above defense
         if(pindexBest)
             if(pindexBest->pprev)
@@ -2125,7 +2124,6 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
                                 return error("\n ProcessBlock() : Possible Multipeer 51 percent detected, initiating anti-legit-peerban defense! halting until valid block! This is normal.. \n");
                             }
                         }
-		
 		
 		//stop accepting blocks.. including our own, for ten minutes
 		//to avoid a "ban-chain"
